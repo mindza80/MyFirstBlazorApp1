@@ -1,5 +1,6 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using System.Security.Claims;
 
 namespace MyFirstBlazorApp.Authentification
 {
@@ -14,9 +15,44 @@ namespace MyFirstBlazorApp.Authentification
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            var token = _localStorageService.GetItemAsync<string>("MyFirstToken");
+            var token = await _localStorageService.GetItemAsync<string>("MyFirstBlazorAppsFirstToken");
 
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                return await Task.FromResult(new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity())));
+            }
 
+            bool verified = true; //Check if Token is legit
+
+            if (verified)
+            {
+                return await Task.FromResult(new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.Role, "Your Role"), //get from token
+                    new Claim(ClaimTypes.Name, "User Name") // get from token
+                }, "ConnectedType"))));
+            }
+
+            return await Task.FromResult(new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity())));
+        }
+
+        public void UserAuthenticated(string userName)
+        {
+            var identity = new ClaimsIdentity(new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.Role, "Your Role"), //get from token
+                new Claim(ClaimTypes.Name, "User Name") // get from token
+            }, "ConnectedType"));
+
+            var user = new ClaimsPrincipal(identity);
+
+            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(user)));
+        }
+
+        public async Task UserLogOut() 
+        {
+            await _localStorageService.RemoveItemAsync("MyFirstBlazorAppsFirstToken");
+            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()))));
         }
     }
 }
