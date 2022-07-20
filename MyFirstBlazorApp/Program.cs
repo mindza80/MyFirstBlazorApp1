@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MyFirstBlazorApp;
@@ -9,7 +10,7 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-builder.Services.AddTransient<IAuthenticationStateProviderServise, AuthenticationStateProviderServise>();
+builder.Services.AddTransient<AuthenticationStateProvider, TokenAuthenticationStateProviderServise>();
 
 
 await builder.Build().RunAsync();

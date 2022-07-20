@@ -1,15 +1,14 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
-using MyFirstBlazorApp.Authentification.Contracts;
 using System.Security.Claims;
 
 namespace MyFirstBlazorApp.Authentification
 {
-    public class AuthenticationStateProviderServise : AuthenticationStateProvider, IAuthenticationStateProviderServise
+    public class TokenAuthenticationStateProviderServise : AuthenticationStateProvider
     {
         private readonly ILocalStorageService _localStorageService;
 
-        public AuthenticationStateProviderServise(ILocalStorageService localStorage)
+        public TokenAuthenticationStateProviderServise(ILocalStorageService localStorage)
         {
             _localStorageService = localStorage;
         }
