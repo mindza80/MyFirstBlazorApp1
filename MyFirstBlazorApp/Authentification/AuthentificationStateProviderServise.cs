@@ -1,10 +1,11 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using MyFirstBlazorApp.Authentification.Contracts;
 using System.Security.Claims;
 
 namespace MyFirstBlazorApp.Authentification
 {
-    public class AuthenticationStateProviderServise : AuthenticationStateProvider
+    public class AuthenticationStateProviderServise : AuthenticationStateProvider, IAuthenticationStateProviderServise
     {
         private readonly ILocalStorageService _localStorageService;
 
@@ -36,17 +37,13 @@ namespace MyFirstBlazorApp.Authentification
             return await Task.FromResult(new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity())));
         }
 
-        public void UserAuthenticated(string userName)
+        public void UserAuthenticated(string userName, string role)
         {
-            var identity = new ClaimsIdentity(new ClaimsIdentity(new[]
+            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(new ClaimsIdentity(new[]
             {
-                new Claim(ClaimTypes.Role, "Your Role"), //get from token
-                new Claim(ClaimTypes.Name, "User Name") // get from token
-            }, "ConnectedType"));
-
-            var user = new ClaimsPrincipal(identity);
-
-            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(user)));
+                new Claim(ClaimTypes.Role, userName), //get from token
+                new Claim(ClaimTypes.Name, role) // get from token
+            }, "ConnectedType"))))));
         }
 
         public async Task UserLogOut() 
