@@ -1,0 +1,180 @@
+﻿@inject IJSRuntime JSRuntime
+
+<div class="LoginMainContainer hide">
+    <div class="LogoContainer">
+        <img src="https://iconape.com/wp-content/files/sh/51404/svg/c--4.svg" />
+    </div>
+    <div class="TextBoxesContainer">
+       <input @bind="@UserName" />
+       <input type="password" @bind="@Password" />
+    </div>
+    <div class="ButtonsContainer">
+        <input type="button" value="Sign In" />
+    </div>
+</div>
+
+
+<style>
+    .ButtonsContainer{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-content: center;
+        width: 100% !important;
+    }
+
+    .ButtonsContainer input{
+        height: 40px;
+        width: 100px;
+        border: none;
+        background: #35af7c;
+        border-radius: 10px;
+        box-shadow: rgb(0 0 0 / 15%) 1.95px 1.95px 2.6px;
+        color: white;
+        font-size: 18px;
+        outline: 1px solid #227a561c;
+    }
+
+    .ButtonsContainer input:hover{
+        height: 40px;
+        width: 100px;
+        border: none;
+        background: #47b788;
+        border-radius: 10px;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        color: white;
+        font-size: 18px;
+        outline: 1px solid #227a561c;
+        transition: 0.5s;
+    }
+
+    .ButtonsContainer input:active{
+        height: 40px;
+        width: 100px;
+        border: none;
+        background: #398b69;
+        border-radius: 10px;
+        box-shadow: rgb(0 0 0 / 50%) 1.95px 1.95px 2.6px inset;
+        color: white;
+        font-size: 18px;
+        outline: 1px solid #227a561c;
+        transition: 0.5s;
+    }
+
+    .LogoContainer{
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        width: 100% !important;
+    }
+
+    .LogoContainer img{
+        height: 150px;
+        margin-top: 20px;
+    }
+    
+    .TextBoxesContainer{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-content: center;
+        margin-top: 140px;
+        width: 100% !important;
+    }
+
+     .TextBoxesContainer input{
+        margin: 10px;
+        margin-left: 200px;
+        margin-right: 200px;
+        width: 100% !important;
+        outline: 0;
+        height: 35px;
+        font-size: 18px;
+        padding: 10px;
+        padding-left: 30px;
+        padding-right: 30px;
+        border: none;
+        border-radius: 10px;
+        box-shadow: rgb(0 0 0 / 5%) 0px 6px 24px 0px, rgb(0 0 0 / 8%) 0px 0px 0px 1px, rgb(0 0 0 / 12%) 0px 3px 4px;
+    }
+
+    .TextBoxesContainer input:hover{
+        margin: 10px;
+        margin-left: 200px;
+        margin-right: 200px;
+        width: 100% !important;
+        outline: 0;
+        height: 35px;
+        font-size: 18px;
+        padding: 10px;
+        padding-left: 30px;
+        padding-right: 30px;
+        border: none;
+        border-radius: 10px;
+        box-shadow: rgb(0 0 0 / 5%) 0px 6px 24px 0px inset, rgb(0 0 0 / 8%) 0px 0px 0px 1px inset, rgb(0 0 0 / 9%) 0px 4px 5px;
+        transition: 0.67s;
+    }
+
+    .LoginMainContainer.hide{
+        width: 1px;
+        height: 450px;
+        margin: 20px;
+        border-radius: 40px;
+        margin-top: -150px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        background-color: #f7f7f7;
+        flex-wrap: wrap;
+        transition: 0.41s;
+    }
+
+    .LoginMainContainer.hide div img{
+        opacity: 0;
+    }
+
+     .LoginMainContainer.ShowTransition div img{
+        opacity: 1;
+    }
+    
+    .LoginMainContainer.hide div{
+        width: 1px;
+        height: 1px;
+        display: none;
+        transition: 1s;
+    }
+    
+    .LoginMainContainer.ShowTransition div{
+        width: 1px;
+        height: 1px;
+        transition: 1s;        
+    }
+    
+    .LoginMainContainer.ShowTransition{
+        display: flex;
+        width: 700px;
+        height: 450px;
+        margin: 20px;
+        border-radius: 20px;
+        margin-top: -150px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        background-color: #ffffff96;
+        flex-wrap: wrap;
+        transition: 0.41s;
+    }
+    
+    .LoginMainContainer:hover
+    {
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    }
+
+</style>
+
+@code {
+    public string UserName { get; set; } = "Prisijungimas";
+    public string Password { get; set; } = "Slaptikas";
+
+    protected async override void OnInitialized()
+    {
+        await Task.Delay(1000);
+        await JSRuntime.InvokeVoidAsync("JSMethods.ShowLogin");
+    }
+}
