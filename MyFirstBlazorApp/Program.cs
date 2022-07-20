@@ -15,5 +15,6 @@ builder.Services.AddTransient<AuthenticationStateProvider, TokenAuthenticationSt
 builder.Services.AddSingleton<ICryptographyServise, CryptographyServise>(x => new CryptographyServise(builder.Configuration.GetValue<string>("Secret")));
 builder.Services.AddDbContext<WebDatabaseContext>();
 builder.Services.AddScoped<IUserServise, UserServise>();
+builder.Services.AddScoped<IAccessTokenServise, AccessTokenServise>();
 
 await builder.Build().RunAsync();

@@ -1,9 +1,11 @@
-﻿using System.Text;
+﻿using MyFirstBlazorApp.Authentification.Contracts;
+using Newtonsoft.Json.Linq;
+using System.Text;
 using System.Text.Json;
 
 namespace MyFirstBlazorApp.Authentification
 {
-    public class AccessTokenServise
+    public class AccessTokenServise : IAccessTokenServise
     {
         private const int TokenIsValidFor = 8;
 
@@ -35,38 +37,37 @@ namespace MyFirstBlazorApp.Authentification
             return $"{header}.{body}.{signature}";
         }
 
-        public string GetName(string token)
-        {
+        public string GetName(string token) => 
+            JObject.Parse(DecodeBody(token)).Value<string>("usr");
 
-        }
+        public string GetRole(string token) =>
+            JObject.Parse(DecodeBody(token)).Value<string>("rol");
 
-        public string GetRole(string token)
-        {
+        private string ToBase64(string message) => 
+            Convert.ToBase64String(Encoding.UTF8.GetBytes(message));
 
-        }
+        private string FromBase64(string base64Message) => 
+            Encoding.UTF8.GetString(Convert.FromBase64String(base64Message));
 
-        private string DecodeBody(string token)
-        {
-
-        }
-
-        private string ToBase64(string message) => Convert.ToBase64String(Encoding.UTF8.GetBytes(message));
-
-        private string FromBase64(string base64Message) => Encoding.UTF8.GetString(Convert.FromBase64String(base64Message));
-
-        private bool IsTokenValid(string token)
-        {
-
-        }
+        private bool IsTokenValid(string token) =>
+            IsSignatureUntampered(token) && !IsTokenExpired(token);
 
         private bool IsSignatureUntampered(string token)
         {
+            var tokenParts = token.Split('.');
 
+            if(tokenParts.Length != 3)
+            {
+                return false;
+            }
+
+            return _cryptoServise.VerifyHash(tokenParts[2], $"{tokenParts[0]}.{tokenParts[1]}");
         }
 
-        private bool IsTokenExpired(string token)
-        {
+        private bool IsTokenExpired(string token) => 
+            DateTime.Parse(JObject.Parse(DecodeBody(token)).Value<string>("exp")) < DateTime.Now;
 
-        }
+        private string DecodeBody(string token) => 
+            FromBase64(token.Split('.')[1]);
     }
 }
