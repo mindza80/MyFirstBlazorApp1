@@ -1,4 +1,7 @@
-﻿@inject IJSRuntime JSRuntime
+﻿@using MyFirstBlazorApp.Authentification.Contracts
+
+@inject IJSRuntime JSRuntime
+@inject IUserServise UserServise
 
 <div class="LoginMainContainer hide">
     <div class="LogoContainer">
@@ -9,7 +12,7 @@
        <input type="password" @bind="@Password" />
     </div>
     <div class="ButtonsContainer">
-        <input type="button" value="Sign In" />
+        <input @onclick="LoginAction" type="button" value="Sign In" />
     </div>
 </div>
 
@@ -169,12 +172,17 @@
 </style>
 
 @code {
-    public string UserName { get; set; } = "Prisijungimas";
-    public string Password { get; set; } = "Slaptikas";
+    public string UserName { get; set; }
+    public string Password { get; set; }
 
     protected async override void OnInitialized()
     {
         await Task.Delay(1000);
         await JSRuntime.InvokeVoidAsync("JSMethods.ShowLogin");
+    }
+
+    protected async Task LoginAction()
+    {
+        var User = UserServise.VerifyLogin(UserName, Password);
     }
 }

@@ -6,11 +6,11 @@ namespace MyFirstBlazorApp.Authentification
 {
     public class CryptographyServise : ICryptographyServise
     {
-        private readonly string _secret;
+        private readonly string _secret = "kolkas toks";
 
         public CryptographyServise(string secret)
         {
-            _secret = secret;
+            //_secret = secret;
         }
 
         public string Hash(string message)
