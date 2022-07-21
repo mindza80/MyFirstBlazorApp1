@@ -6,11 +6,11 @@ namespace MyFirstBlazorApp.Authentification
 {
     public class CryptographyServise : ICryptographyServise
     {
-        private readonly string _secret = "kolkas toks";
+        private readonly string _secret;
 
         public CryptographyServise(string secret)
         {
-            //_secret = secret;
+            _secret = secret;
         }
 
         public string Hash(string message)
@@ -23,7 +23,7 @@ namespace MyFirstBlazorApp.Authentification
             byte[] hashedMessage = hMacSha256Provider.ComputeHash(messageBytes);
 
             return Convert.ToBase64String(hashedMessage);
-        } 
+        }
 
         public bool VerifyHash(string hash, string message) => Hash(message) == hash;
     }

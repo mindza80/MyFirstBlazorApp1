@@ -1,8 +1,8 @@
-﻿using MyFirstBlazorApp.Authentification.Contracts;
-using MyFirstBlazorApp.Database;
-using MyFirstBlazorApp.DataTransferObjects_DTO;
+﻿using ServerSideBlazor.Authentification.Contracts;
+using ServerSideBlazor.Database;
+using ServerSideBlazor.DataTransferObjects_DTO;
 
-namespace MyFirstBlazorApp.Authentification
+namespace ServerSideBlazor.Authentification
 {
     public class UserServise : IUserServise
     {

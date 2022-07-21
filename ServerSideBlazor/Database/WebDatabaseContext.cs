@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MyFirstBlazorApp.Database.Entities;
+using ServerSideBlazor.Database.Entities;
 
-namespace MyFirstBlazorApp.Database
+namespace ServerSideBlazor.Database
 {
     public class WebDatabaseContext : DbContext
     {
