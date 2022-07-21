@@ -1,4 +1,5 @@
 ﻿using MyFirstServerSideBlazor.Authentification.Contracts;
+using MyFirstServerSideBlazor.DataTransferObjects_DTO;
 using Newtonsoft.Json.Linq;
 using System.Text;
 using System.Text.Json;
@@ -16,7 +17,7 @@ namespace MyFirstServerSideBlazor.Authentification
             _cryptoServise = cryptoServise;
         }
 
-        public string CreateAccessToken(string name, string role)
+        public string CreateAccessToken(UserData user)
         {
             var header = ToBase64(JsonSerializer.Serialize(new
             {
@@ -28,8 +29,8 @@ namespace MyFirstServerSideBlazor.Authentification
             {
                 iss = "MyFirstTokenServise",
                 exp = DateTime.Now.AddHours(TokenIsValidFor).ToString("yyyy-MM-dd HH:mm:ss"),
-                usr = name,
-                rol = role
+                usr = user.UserName,
+                rol = user.Role
             }));
 
             var signature = _cryptoServise.Hash($"{header}.{body}");
@@ -49,7 +50,7 @@ namespace MyFirstServerSideBlazor.Authentification
         private string FromBase64(string base64Message) => 
             Encoding.UTF8.GetString(Convert.FromBase64String(base64Message));
 
-        private bool IsTokenValid(string token) =>
+        public bool IsTokenValid(string token) =>
             IsSignatureUntampered(token) && !IsTokenExpired(token);
 
         private bool IsSignatureUntampered(string token)

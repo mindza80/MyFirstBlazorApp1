@@ -22,7 +22,9 @@ namespace MyFirstServerSideBlazor.Authentification
             var hMacSha256Provider = new HMACSHA256(keyBytes);
             byte[] hashedMessage = hMacSha256Provider.ComputeHash(messageBytes);
 
-            return Convert.ToBase64String(hashedMessage);
+            var hashedBase64 = Convert.ToBase64String(hashedMessage);
+            
+            return hashedBase64;
         }
 
         public bool VerifyHash(string hash, string message) => Hash(message) == hash;

@@ -20,10 +20,7 @@ namespace MyFirstServerSideBlazor.Authentification
         public UserData VerifyLogin(string userName, string password)
         {
             var hashedPassword = _cryptographyServise.Hash(password);
-            var users = _webDatabaseContext.Users.ToList();
             var user = _webDatabaseContext.Users.Where(x => x.UserName == userName && x.PasswordHash == hashedPassword).FirstOrDefault();
-
-            var test = "test";
 
             return user == null
                 ? null

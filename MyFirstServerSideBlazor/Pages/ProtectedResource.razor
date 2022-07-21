@@ -1,0 +1,10 @@
+﻿@page "/ProtectedResource"
+
+<AuthorizeView Roles="Admin">
+    <h1>Adminas</h1>
+</AuthorizeView>
+
+<AuthorizeView Roles="simpleUser">
+    <h1>User</h1>
+</AuthorizeView>
+

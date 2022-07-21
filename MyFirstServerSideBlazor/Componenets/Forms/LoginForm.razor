@@ -1,7 +1,12 @@
-﻿@using MyFirstServerSideBlazor.Authentification.Contracts
+﻿@using Blazored.LocalStorage
+@using MyFirstServerSideBlazor.Authentification
+@using MyFirstServerSideBlazor.Authentification.Contracts
 
 @inject IJSRuntime JSRuntime
 @inject IUserServise UserServise
+@inject IAccessTokenServise TokenServise
+@inject ILocalStorageService LocalStorageServise
+@inject AuthenticationStateProvider AuthProvider
 
 <div class="LoginMainContainer hide">
     <div class="LogoContainer">
@@ -12,12 +17,26 @@
        <input type="password" @bind="@Password" />
     </div>
     <div class="ButtonsContainer">
+        @{
+            if(!isLoginSuccessfull){
+            <div class="BadUsernameWarning">Bad user name or password</div>
+            }
+         }
         <input @onclick="LoginAction" type="button" value="Sign In" />
     </div>
 </div>
 
 
 <style>
+    .BadUsernameWarning{
+        color: red;
+        font-size: 10px;
+        width: 100%;
+        display: block;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
     .ButtonsContainer{
         display: flex;
         flex-wrap: wrap;
@@ -175,6 +194,8 @@
     public string UserName { get; set; }
     public string Password { get; set; }
 
+    protected bool isLoginSuccessfull = true;
+
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
         await Task.Delay(1000);
@@ -183,6 +204,16 @@
 
     protected async Task LoginAction()
     {
-        var User = UserServise.VerifyLogin(UserName, Password);
+        var user = UserServise.VerifyLogin(UserName, Password);
+
+        if(user != null)
+        {
+            await LocalStorageServise.SetItemAsync("MyFirstServerSideBlazorsFirstToken", TokenServise.CreateAccessToken(user));
+            ((TokenAuthenticationStateProviderServise)AuthProvider).UserAuthenticated(user);
+        }
+        else
+        {
+            isLoginSuccessfull = false;
+        }
     }
 }

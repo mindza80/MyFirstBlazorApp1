@@ -14,8 +14,6 @@ namespace MyFirstServerSideBlazor.Database
 
         public DbSet<BlazorUser> Users { get; set; }
 
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
