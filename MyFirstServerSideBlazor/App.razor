@@ -5,11 +5,10 @@
     <Found Context="routeData">
         <AuthorizeView>
             <Authorized>
-
+               <RouteView DefaultLayout="@typeof(EmptyLayout)" RouteData="@routeData" />
             </Authorized>
             <NotAuthorized>
-                <RouteView RouteData="@routeData" DefaultLayout="@typeof(Login)" />
-                <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+                <LoginBody/>
             </NotAuthorized>
         </AuthorizeView>        
     </Found>

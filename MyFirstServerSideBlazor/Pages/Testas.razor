@@ -1,16 +1,20 @@
-﻿@page "/ProtectedResource"
+﻿@page "/Testas"
 @using System.Security.Claims
 @layout EmptyLayout
 
+@inject NavigationManager NavManger
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 <AuthorizeView Roles="admin">
-    <h1>Adminas</h1>
+    <h1> (@Role) @UserName, Labas</h1>
 </AuthorizeView>
 
 <AuthorizeView Roles="lopas">
-    <h1>(@Role) @UserName, Labas</h1>
+    @{
+        NavManger.NavigateTo("/ProtectedResource");
+    }
 </AuthorizeView>
+
 
 @code{
     public string UserName { get; set; }
@@ -23,4 +27,3 @@
 
         StateHasChanged();
     }}
-

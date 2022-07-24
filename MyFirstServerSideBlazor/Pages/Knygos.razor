@@ -1,0 +1,26 @@
+﻿@page "/Knygos"
+@layout EmptyLayout
+
+@inject NavigationManager NavManger
+
+<div class="mainKnygos">
+    <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Ieškok knygos" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit" >Search</button>
+     </form>
+     <div>
+        <h3>Knygos</h3>
+     </div>
+</div>
+
+
+<style>
+    .d-flex{
+        position: fixed;
+        top:100px !important;
+    }
+</style>
+
+@code {
+    
+}
