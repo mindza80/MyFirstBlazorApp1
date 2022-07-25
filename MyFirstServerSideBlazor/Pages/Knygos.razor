@@ -1,15 +1,40 @@
 ﻿@page "/Knygos"
+@using MyFirstServerSideBlazor.Classes.Books
+@using MyFirstServerSideBlazor.Servises.Contracts
 @layout EmptyLayout
 
 @inject NavigationManager NavManger
+@inject IBookServise bookServise
 
 <div class="mainKnygos">
     <form class="d-flex">
         <input class="form-control me-2" type="search" placeholder="Ieškok knygos" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit" >Search</button>
+        <button class="btn btn-outline-success" type="submit" @onclick="SearchForBooks" >Search</button>
      </form>
      <div>
         <h3>Knygos</h3>
+        @{
+            if (isBooksLoading)
+            {
+                <h1>Searching for @(SearchKeywords) books</h1>
+            }
+            else
+            {
+                <div class="container">
+                <div class="row">
+                        @{
+                            if(BookList != null && BookList.Count() > 0)
+                            {
+                                foreach(var book in BookList)
+                                {
+                                    <BookComponent Book="@book"/>
+                                }
+                            }
+                        }
+                </div>
+                </div>
+            }
+        }
      </div>
 </div>
 
@@ -22,5 +47,17 @@
 </style>
 
 @code {
-    
+
+    public string SearchKeywords { get; set; }
+    public bool isBooksLoading { get; set; }
+    public List<Book> BookList { get; set; }
+
+    protected async Task SearchForBooks()
+    {
+        isBooksLoading = true;
+        StateHasChanged();
+        BookList = await bookServise.SearchBooksByAuthor(SearchKeywords);
+        isBooksLoading = false;
+        StateHasChanged();
+    }
 }
