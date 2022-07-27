@@ -1,0 +1,31 @@
+﻿@using MyFirstServerSideBlazor.Classes.Books
+
+<div class="card">
+    <img src="@Book.CoverUrl" class="card-img-top BookCover" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">@Book.title</h5>
+      <p class="card-text">@Book.author.name (@Book.author.birth_date)</p>
+    </div>
+</div>
+
+<style>
+.BookCover{
+    margin-top: 0px;
+    border-radius: 4px 4px 0px 0px;
+    float: left;
+    height: 300px;
+    width: 100%;
+    object-fit: cover;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+.card{
+    margin: 5px;
+    padding:0px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+</style>      
+
+@code {
+    [Parameter]
+    public Book Book { get; set; }
+}

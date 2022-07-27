@@ -1,49 +1,182 @@
 ﻿@page "/Knygos"
 @using MyFirstServerSideBlazor.Classes.Books
+@using MyFirstServerSideBlazor.Componenets
 @using MyFirstServerSideBlazor.Servises.Contracts
+@using MyFirstServerSideBlazor.Servises
+@using System.Web
+
 @layout EmptyLayout
 
 @inject NavigationManager NavManger
 @inject IBookServise bookServise
 
-<div class="mainKnygos">
-    <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Ieškok knygos" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit" @onclick="SearchForBooks" >Search</button>
-     </form>
-     <div>
-        <h3>Knygos</h3>
+
+    <div class="d-flex">
+        <input @onkeydown="checkKey" class="form-control me-2" type="search" @bind="@SearchKeywords" placeholder="Įveskite autorių" aria-label="Search">
+        <button class="btn btn-outline-success" type="button" @onclick="SearchForBooks" >Search</button>
+     </div>
+     
+        
         @{
             if (isBooksLoading)
             {
-                <h1>Searching for @(SearchKeywords) books</h1>
+    
+        <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        <h1 class="H1">Searching for @(SearchKeywords) books</h1>
+    
             }
             else
             {
-                <div class="container">
-                <div class="row">
-                        @{
-                            if(BookList != null && BookList.Count() > 0)
-                            {
-                                foreach(var book in BookList)
-                                {
-                                    <BookComponent Book="@book"/>
-                                }
-                            }
+    <div class="container1">
+                                                  <div class="row row-cols-md-4 g-1">
+                                                     @{
+           if(BookList != null && BookList.Count() > 0)
+             {
+               foreach(var book in BookList)
+                {
+                                                                                                            <div class="card shadow-lg p-3 mb-5 bg-white rounded" style="max-width: 18rem">
+                                                                                                                <img src=@book.CoverUrl class="card-img-top">
+                                                                                                            <div class="card-body" style="height: 60%">                          
+                                                                                                                <p class="card-text">@book.title</p>
+                                                                                                            </div>
+                                                                                                            <ul class="list-group list-group-flush">
+                                                                                                                <li class="list-group-item">@book.author.name</li>
+                                                                                                                <li class="list-group-item">@book.author.birth_date</li>
+                                                                                                            </ul>
+                                                                                                                    </div>
                         }
-                </div>
-                </div>
+                    }
+                                                            }
+                                                  </div>
+    </div>
             }
+            
         }
-     </div>
-</div>
+     
+
 
 
 <style>
+    
     .d-flex{
-        position: fixed;
-        top:100px !important;
+        position: sticky;
+        top:70px !important;
+        
     }
+
+    .form-control{
+        max-width:400px;
+        position:center;
+        margin-left:35%;
+    }
+
+    .container1{
+    position: fixed;
+   top: 120px; 
+   left: 0;
+   right: 0;
+   bottom: 0;
+        overflow-y: scroll;
+    }
+
+    
+.card{
+     flex: 1 1 200px;
+}
+.MainBody{
+    display: block !important;
+}
+
+
+.H1{
+    position:absolute;
+    top: 40%; 
+    left:35%;
+}
+
+.lds-spinner {
+    position:absolute;
+    top: 220px; 
+    left:50%;
+  color: official;
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-spinner div {
+  transform-origin: 40px 40px;
+  animation: lds-spinner 1.2s linear infinite;
+}
+.lds-spinner div:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 3px;
+  left: 37px;
+  width: 6px;
+  height: 18px;
+  border-radius: 20%;
+  background: #fff;
+}
+.lds-spinner div:nth-child(1) {
+  transform: rotate(0deg);
+  animation-delay: -1.1s;
+}
+.lds-spinner div:nth-child(2) {
+  transform: rotate(30deg);
+  animation-delay: -1s;
+}
+.lds-spinner div:nth-child(3) {
+  transform: rotate(60deg);
+  animation-delay: -0.9s;
+}
+.lds-spinner div:nth-child(4) {
+  transform: rotate(90deg);
+  animation-delay: -0.8s;
+}
+.lds-spinner div:nth-child(5) {
+  transform: rotate(120deg);
+  animation-delay: -0.7s;
+}
+.lds-spinner div:nth-child(6) {
+  transform: rotate(150deg);
+  animation-delay: -0.6s;
+}
+.lds-spinner div:nth-child(7) {
+  transform: rotate(180deg);
+  animation-delay: -0.5s;
+}
+.lds-spinner div:nth-child(8) {
+  transform: rotate(210deg);
+  animation-delay: -0.4s;
+}
+.lds-spinner div:nth-child(9) {
+  transform: rotate(240deg);
+  animation-delay: -0.3s;
+}
+.lds-spinner div:nth-child(10) {
+  transform: rotate(270deg);
+  animation-delay: -0.2s;
+}
+.lds-spinner div:nth-child(11) {
+  transform: rotate(300deg);
+  animation-delay: -0.1s;
+}
+.lds-spinner div:nth-child(12) {
+  transform: rotate(330deg);
+  animation-delay: 0s;
+}
+@@keyframes lds-spinner {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+
 </style>
 
 @code {
@@ -57,7 +190,23 @@
         isBooksLoading = true;
         StateHasChanged();
         BookList = await bookServise.SearchBooksByAuthor(SearchKeywords);
+        foreach (var book in BookList)
+        {
+            if (string.IsNullOrWhiteSpace(book.CoverUrl))
+            {
+                book.CoverUrl = $"http://localhost:5004/imageAPI/cover/{book.title}";
+            }
+        }
+
         isBooksLoading = false;
         StateHasChanged();
+    }
+
+    protected async Task checkKey(KeyboardEventArgs args)
+    {
+        if(args.Key == "Enter" && SearchKeywords !="")
+        {
+            await SearchForBooks();
+        }
     }
 }

@@ -13,6 +13,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddBlazoredLocalStorage();
 
+builder.Services.AddMvcCore(options => options.EnableEndpointRouting = false);
+
 var secret = builder.Configuration.GetValue<string>("Secret");
 
 builder.Services.AddSingleton<ILoggerServise, LoggerServise>();
@@ -22,6 +24,7 @@ builder.Services.AddDbContext<WebDatabaseContext>();
 builder.Services.AddScoped<IUserServise, UserServise>();
 builder.Services.AddScoped<IAccessTokenServise, AccessTokenServise>();
 builder.Services.AddScoped<IBookServise, BookServise>();
+builder.Services.AddScoped<IBookCoverGeneratorServise, BookCoverGeneratorServise>();
 
 
 var app = builder.Build();
@@ -36,6 +39,8 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseMvcWithDefaultRoute();
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");

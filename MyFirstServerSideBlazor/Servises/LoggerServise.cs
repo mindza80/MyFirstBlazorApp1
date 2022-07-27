@@ -1,6 +1,6 @@
 ﻿using MyFirstServerSideBlazor.Servises.Contracts;
 
-namespace MyFirstServerSideBlazor.Authentification
+namespace MyFirstServerSideBlazor.Servises
 {
     public class LoggerServise : ILoggerServise
     {
