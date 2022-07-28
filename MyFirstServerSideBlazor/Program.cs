@@ -25,7 +25,7 @@ builder.Services.AddScoped<IUserServise, UserServise>();
 builder.Services.AddScoped<IAccessTokenServise, AccessTokenServise>();
 builder.Services.AddScoped<IBookServise, BookServise>();
 builder.Services.AddScoped<IBookCoverGeneratorServise, BookCoverGeneratorServise>();
-
+builder.Services.AddSingleton<FontService>();
 
 var app = builder.Build();
 

@@ -5,14 +5,21 @@ namespace MyFirstServerSideBlazor.Servises
 {
     public class BookCoverGeneratorServise : IBookCoverGeneratorServise
     {
+        private readonly FontService _fontService;
+
+        public BookCoverGeneratorServise(FontService fontService)
+        {
+            _fontService = fontService;
+        }
+
         public Image CreateCover(string BookTitle)
         {
             var blankCover = Image.FromFile(@"wwwroot/css/images/BookCover30.png");
 
             var cover = WriteTextOnImage(blankCover, BookTitle,
-                new Font("Snell Roundhand, cursive", 16),
+                new Font(_fontService.Font.Families[0], 16),
                 new SolidBrush(Color.DarkGoldenrod),
-                new Point(50, 50));
+                new Point(45, 50));
 
             return cover;
         }
