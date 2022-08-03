@@ -8,7 +8,8 @@
                <RouteView DefaultLayout="@typeof(EmptyLayout)" RouteData="@routeData" />
             </Authorized>
             <NotAuthorized>
-                <LoginBody/>
+                @*@<LoginBody/>*@
+                <SigninBody/>
             </NotAuthorized>
         </AuthorizeView>        
     </Found>

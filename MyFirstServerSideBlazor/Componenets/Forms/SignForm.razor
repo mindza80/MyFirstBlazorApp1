@@ -9,47 +9,57 @@
 @inject AuthenticationStateProvider AuthProvider
 @inject NavigationManager NavigationManager
 
-<div class="LoginMainContainer ShowTransition">
-    <div class="LogoContainer">
+<div class="SignMainContainer ShowTransition">
+    <div class="SignContainer">
         <img src="https://api.logo.com/api/v2/images?format=webp&logo=logo_2c5042ea-632d-4f85-9519-9a3dd390f8e5&width=1000&background=transparent&u=1659042533" />
     </div>
-    <div class="TextBoxesContainer">
+    <div class="TextBoxesContainer1">
        <input @bind="@UserName" placeholder="User"/>
        <input type="password" @bind="@Password" placeholder="Pass"/>
+       <input type="password" @bind="@RetypePassword" placeholder="Retype Pass"/>
     </div>
     <div class="ButtonsContainer">
+        <input id="signIn" @onclick="SignAction" type="button" value="Sign In" />
         @{
-            if(!isLoginSuccessfull){
-                    <div class="BadUsernameWarning">Bad user name or password</div>
+            if(!isPassSuccessfull){
+                                            <div class="InvalidPass">Slaptažodis turi būti ilgesnis nei 6 simboliai</div>
+                                            <div class="InvalidPass">Slaptažodis turi būti ilgesnis nei 6 simboliai</div>
+                                            <div class="InvalidPass">Slaptažodis turi būti ilgesnis nei 6 simboliai</div>
+                                            <div class="InvalidPass">Slaptažodis turi būti ilgesnis nei 6 simboliai</div>
             }
          }
-        <input @onclick="LoginAction" type="button" value="Log In" />
         
-        <input id="signIn" @onclick="SignAction" type="button" value="Sign In" />
+        
+        
     </div>
 </div>
 
 
 <style>
     #signIn{
-        margin-left: 20px;
+        
     }
 
-    .BadUsernameWarning{
+    .InvalidPass{
+        margin-top:50px;
         color: red;
         font-size: 10px;
         width: 100%;
-        display: block;
+        display: contents;
         text-align: center;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 
     .ButtonsContainer{
         display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
+        flex-direction:row-reverse;
+        flex-wrap:wrap;
+        justify-content:center;
         align-content: center;
+        align-items:flex-start;
         width: 100% !important;
+       
+
     }
 
     .ButtonsContainer input{
@@ -90,19 +100,19 @@
         transition: 0.5s;
     }
 
-    .LogoContainer{
+    .SignContainer{
         display: flex;
         justify-content: center;
         align-content: center;
         width: 100% !important;
     }
 
-    .LogoContainer img{
+    .SignContainer img{
         height: 150px;
         margin-top: 20px;
     }
     
-    .TextBoxesContainer{
+    .TextBoxesContainer1{
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
@@ -111,7 +121,7 @@
         width: 100% !important;
     }
 
-     .TextBoxesContainer input{
+     .TextBoxesContainer1 input{
         margin: 10px;
         margin-left: 200px;
         margin-right: 200px;
@@ -127,7 +137,7 @@
         box-shadow: rgb(0 0 0 / 5%) 0px 6px 24px 0px, rgb(0 0 0 / 8%) 0px 0px 0px 1px, rgb(0 0 0 / 12%) 0px 3px 4px;
     }
 
-    .TextBoxesContainer input:hover{
+    .TextBoxesContainer1 input:hover{
         margin: 10px;
         margin-left: 100px;
         margin-right: 100px;
@@ -144,7 +154,7 @@
         transition: 0.67s;
     }
 
-    .LoginMainContainer.hide{
+    .SignMainContainer.hide{
         width: 1px;
         height: 450px;
         margin: 20px;
@@ -156,31 +166,31 @@
         transition: 0.41s;
     }
 
-    .LoginMainContainer.hide div img{
+    .SignMainContainer.hide div img{
         opacity: 0;
     }
 
-     .LoginMainContainer.ShowTransition div img{
+     .SignMainContainer.ShowTransition div img{
         opacity: 1;
     }
     
-    .LoginMainContainer.hide div{
+    .SignMainContainer.hide div{
         width: 1px;
         height: 1px;
         display: none;
         transition: 1s;
     }
     
-    .LoginMainContainer.ShowTransition div{
+    .SignMainContainer.ShowTransition div{
         width: 1px;
         height: 1px;
         transition: 1s;        
     }
     
-    .LoginMainContainer.ShowTransition{
+    .SignMainContainer.ShowTransition{
         display: flex;
-        width: 500px;
-        height: 400px;
+        width: 600px;
+        height: 500px;
         margin: 20px;
         border-radius: 20px;
         margin-top: -450px;
@@ -190,7 +200,7 @@
         transition: 0.41s;
     }
     
-    .LoginMainContainer:hover
+    .SignMainContainer:hover
     {
         box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     }
@@ -200,29 +210,13 @@
 @code {
     public string UserName { get; set; }
     public string Password { get; set; }
+    public string RetypePassword { get; set; }
 
-    protected bool isLoginSuccessfull = true;
+    protected bool isPassSuccessfull = false;
 
-
-
-    protected async Task LoginAction()
-    {
-        var user = UserServise.VerifyLogin(UserName, Password);
-
-        if(user != null)
-        {
-            await LocalStorageServise.SetItemAsync("MyFirstServerSideBlazorsFirstToken", TokenServise.CreateAccessToken(user));
-            ((TokenAuthenticationStateProviderServise)AuthProvider).UserAuthenticated(user);
-            NavigationManager.NavigateTo("/Testas");
-        }
-        else
-        {
-            isLoginSuccessfull = false;
-        }
-    }
 
     protected async Task SignAction()
     {
-        NavigationManager.NavigateTo("/SignPage");
+        
     }
 }
