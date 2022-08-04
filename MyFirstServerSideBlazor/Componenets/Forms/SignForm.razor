@@ -19,17 +19,19 @@
        <input type="password" @bind="@RetypePassword" placeholder="Retype Pass"/>
     </div>
     <div class="ButtonsContainer">
-        <input id="signIn" @onclick="SignAction" type="button" value="Sign In" />
+        
         @{
             if(!isPassSuccessfull){
-                                            <div class="InvalidPass">Slaptažodis turi būti ilgesnis nei 6 simboliai</div>
-                                            <div class="InvalidPass">Slaptažodis turi būti ilgesnis nei 6 simboliai</div>
-                                            <div class="InvalidPass">Slaptažodis turi būti ilgesnis nei 6 simboliai</div>
-                                            <div class="InvalidPass">Slaptažodis turi būti ilgesnis nei 6 simboliai</div>
+                <ul>
+                <li class="InvalidPass">Slaptažodis turi būti ilgesnis nei 6 simboliai</li>
+                <li class="InvalidPass">Slaptažodžiai nesutampa</li>
+                <li class="InvalidPass">Slaptažodis turi turėti, bent vieną skaičių (0-9)</li>
+                <li class="InvalidPass">Slaptažodis turi turėti, bent vieną iš šių simbolių (!#$%^&*)</li>
+                </ul>                    
             }
          }
         
-        
+        <input id="signIn" @onclick="SignAction" type="button" value="Sign In" />
         
     </div>
 </div>
@@ -40,23 +42,31 @@
         
     }
 
+    ul{
+        padding-left: 70px;
+        margin-top: 40px;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
     .InvalidPass{
-        margin-top:50px;
+        
         color: red;
         font-size: 10px;
-        width: 100%;
-        display: contents;
-        text-align: center;
-        margin-bottom: 10px;
+        min-width: 55%;
+        display: block;
+        text-align: start;
+        
     }
 
     .ButtonsContainer{
         display: flex;
-        flex-direction:row-reverse;
+        @*flex-direction:row-reverse;*@
         flex-wrap:wrap;
         justify-content:center;
         align-content: center;
-        align-items:flex-start;
+        @*align-items:flex-start;*@
         width: 100% !important;
        
 
@@ -139,8 +149,8 @@
 
     .TextBoxesContainer1 input:hover{
         margin: 10px;
-        margin-left: 100px;
-        margin-right: 100px;
+        margin-left: 150px;
+        margin-right: 150px;
         width: 100% !important;
         outline: 0;
         height: 35px;
