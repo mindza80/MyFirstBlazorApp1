@@ -9,6 +9,9 @@
 @inject AuthenticationStateProvider AuthProvider
 @inject NavigationManager NavigationManager
 
+@layout LoginBody
+@page "/login"
+
 <div class="LoginMainContainer ShowTransition">
     <div class="LogoContainer">
         <img src="https://api.logo.com/api/v2/images?format=webp&logo=logo_2c5042ea-632d-4f85-9519-9a3dd390f8e5&width=1000&background=transparent&u=1659042533" />
@@ -198,6 +201,8 @@
 </style>
 
 @code {
+    [Parameter]
+    public EventCallback ChangePageCallback { get; set; }
     public string UserName { get; set; }
     public string Password { get; set; }
 
@@ -213,7 +218,7 @@
         {
             await LocalStorageServise.SetItemAsync("MyFirstServerSideBlazorsFirstToken", TokenServise.CreateAccessToken(user));
             ((TokenAuthenticationStateProviderServise)AuthProvider).UserAuthenticated(user);
-            NavigationManager.NavigateTo("/Testas");
+            //NavigationManager.NavigateTo("/Testas");
         }
         else
         {
@@ -223,6 +228,7 @@
 
     protected async Task SignAction()
     {
-        NavigationManager.NavigateTo("/SignPage");
+        //NavigationManager.NavigateTo("/SignPage");
+        await ChangePageCallback.InvokeAsync();
     }
 }

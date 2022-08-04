@@ -1,7 +1,63 @@
-﻿@page "/"
+﻿
 @using MyFirstServerSideBlazor.Componenets.Forms
+@inject NavigationManager navigation
+
+@{
+    if (showLogin)
+    {
+    <PageTitle>Login</PageTitle>
+    }
+    else
+    {
+    <PageTitle>Sign In</PageTitle>
+    }
+}
 
 
-<PageTitle>Login</PageTitle>
+@{
+    if (showLogin)
+    {
+    <LoginForm ChangePageCallback="ChangeToSignUp"/>
+    }
+    else
+    {
+    <SignForm ChangePageCallback="ChangeToLogin"/>
+    }
+    }
 
-<LoginForm/>
+@code{
+    public bool showLogin { get; set; } = true;
+
+    protected override void OnInitialized()
+    {
+        navigation.LocationChanged += LocationChanged;
+        base.OnInitialized();
+    }
+
+    void LocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        if (navigation.Uri.Contains("/SignPage"))
+        {
+            showLogin = false;
+        }
+        else
+        {
+            showLogin = true;
+        }
+        StateHasChanged();
+    }
+
+    public void ChangeToSignUp()
+    {
+            navigation.NavigateTo("/SignPage");
+            StateHasChanged();
+    }
+
+    public void ChangeToLogin()
+    {
+        navigation.NavigateTo("/login");
+        StateHasChanged();
+    }    
+
+
+}

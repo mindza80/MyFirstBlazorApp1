@@ -1,6 +1,7 @@
 ﻿@using Blazored.LocalStorage
 @using MyFirstServerSideBlazor.Authentification
 @using MyFirstServerSideBlazor.Authentification.Contracts
+@using System.Text.RegularExpressions
 
 @inject IJSRuntime JSRuntime
 @inject IUserServise UserServise
@@ -8,6 +9,9 @@
 @inject ILocalStorageService LocalStorageServise
 @inject AuthenticationStateProvider AuthProvider
 @inject NavigationManager NavigationManager
+
+@layout LoginBody
+@page "/SignPage"
 
 <div class="SignMainContainer ShowTransition">
     <div class="SignContainer">
@@ -21,17 +25,19 @@
     <div class="ButtonsContainer">
         
         @{
-            if(!isPassSuccessfull){
+            if((validationErrors?.Count() ?? 0) >0){
                 <ul>
-                <li class="InvalidPass">Slaptažodis turi būti ilgesnis nei 6 simboliai</li>
-                <li class="InvalidPass">Slaptažodžiai nesutampa</li>
-                <li class="InvalidPass">Slaptažodis turi turėti, bent vieną skaičių (0-9)</li>
-                <li class="InvalidPass">Slaptažodis turi turėti, bent vieną iš šių simbolių (!#$%^&*)</li>
+                    @{
+                        foreach(var error in validationErrors)
+                        {
+                            <li class="InvalidPass">@error</li>
+                        }
+                    }
                 </ul>                    
             }
          }
         
-        <input id="signIn" @onclick="SignAction" type="button" value="Sign In" />
+        <input id="signIn" @onclick="SignUpAction" type="button" value="Sign In" />
         
     </div>
 </div>
@@ -218,15 +224,61 @@
 </style>
 
 @code {
+     [Parameter]
+    public EventCallback ChangePageCallback { get; set; }
+
     public string UserName { get; set; }
     public string Password { get; set; }
     public string RetypePassword { get; set; }
+    public List<string> validationErrors { get; set; }
 
-    protected bool isPassSuccessfull = false;
 
 
-    protected async Task SignAction()
+
+    protected async Task SignUpAction()
     {
-        
+    validationErrors = ValidateInputs();
+
+    if (validationErrors.Count() == 0)
+    {
+          var result = await UserServise.CreateUser(UserName, Password);
+
+            if (result.IsSuccessfull)
+            {
+                await LocalStorageServise.SetItemAsync("MyFirstServerSideBlazorsFirstToken", TokenServise.CreateAccessToken(result.Content));
+                ((TokenAuthenticationStateProviderServise)AuthProvider).UserAuthenticated(result.Content);
+                NavigationManager.NavigateTo("/");
+            }
+            else
+            {
+                var validationErrors = new List<string>();
+                validationErrors.Add(result.Error);
+            }
+    }
+    }
+
+    protected List<string> ValidateInputs()
+    {
+        validationErrors = new List<string>();
+        var regexForNumber = new Regex(@"\d");
+        var regexForSymbols = new Regex(@"[^\p{L}\d\s@#]");
+
+        if(!(Password.Length > 6))
+        {
+            validationErrors.Add("Slaptažodis turi būti ilgesnis nei 6 simboliai");
+        }
+        if (Password != RetypePassword)
+        {
+            validationErrors.Add("Slaptažodžiai nesutampa");
+        }
+        if (!regexForNumber.IsMatch(Password))
+        {
+            validationErrors.Add("Slaptažodis turi turėti, bent vieną skaičių (0-9)");
+        }
+        if (!regexForSymbols.IsMatch(Password))
+        {
+            validationErrors.Add("Slaptažodis turi turėti, bent vieną iš šių simbolių (!#$%^&*)");
+        }
+        return validationErrors;
     }
 }
