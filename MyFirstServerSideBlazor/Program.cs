@@ -1,5 +1,6 @@
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using MudBlazor.Services;
 using MyFirstServerSideBlazor.Authentification;
 using MyFirstServerSideBlazor.Authentification.Contracts;
 using MyFirstServerSideBlazor.Database;
@@ -26,6 +27,8 @@ builder.Services.AddScoped<IAccessTokenServise, AccessTokenServise>();
 builder.Services.AddScoped<IBookServise, BookServise>();
 builder.Services.AddScoped<IBookCoverGeneratorServise, BookCoverGeneratorServise>();
 builder.Services.AddSingleton<FontService>();
+builder.Services.AddScoped<IEmailServise, EmailServise>();
+builder.Services.AddMudServices();
 
 var app = builder.Build();
 

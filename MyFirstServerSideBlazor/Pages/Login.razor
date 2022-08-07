@@ -21,7 +21,7 @@
     }
     else
     {
-    <SignForm ChangePageCallback="ChangeToLogin"/>
+    <SignWithMud ChangePageCallback="ChangeToLogin"/>
     }
     }
 
@@ -36,7 +36,7 @@
 
     void LocationChanged(object sender, LocationChangedEventArgs e)
     {
-        if (navigation.Uri.Contains("/SignPage"))
+        if (navigation.Uri.Contains("/SignWithMud"))
         {
             showLogin = false;
         }
@@ -49,7 +49,7 @@
 
     public void ChangeToSignUp()
     {
-            navigation.NavigateTo("/SignPage");
+            navigation.NavigateTo("/SignWithMud");
             StateHasChanged();
     }
 

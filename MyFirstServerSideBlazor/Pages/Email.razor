@@ -1,0 +1,77 @@
+﻿@page "/email"
+@using MyFirstServerSideBlazor.Servises.Contracts
+
+@layout EmptyLayout
+
+@inject NavigationManager NavManger
+@inject IEmailServise emailServise
+
+<meta http–equiv=“Content-Type” content=“text/html; charset=UTF-8” />
+
+<div class="d-flex">
+        <input class="form" type="email" @bind="@RecieversField" multiple placeholder="Įveskite email adresą">
+        <input class="form" type="text" @bind="@SubjectField" placeholder="Subject">
+        <textarea class="formMessage" @bind="@EmailField" required="true" placeholder="Įveskite žinutę"></textarea>
+        <button class="btn btn-outline-success" type="button" @onclick="SendEmail" >Send</button>
+</div>
+
+<style>
+    .d-flex{
+        top: 70px;
+        width:80%;
+        height:90%;
+        flex-direction:column;
+    }
+
+    .form{
+        margin-top:10px;
+        display: flex;
+        flex-direction:column;
+        width:80%;
+        position:center;
+        margin-left:10%;
+    }
+
+    .formMessage{
+        margin-top:10px;
+        display: flex;
+        flex-wrap:wrap;
+        width:80%;
+        height:50%;
+        position:center;
+        margin-left:10%;
+    }
+
+    .btn{
+        margin-left:80%;
+        margin-top:30px;
+        width:80px;
+        background-color:lawngreen;
+    }
+</style>
+
+@code {
+    public string SubjectField;
+    public string RecieversField;
+    public string EmailField;
+
+    private async Task SendEmail()
+    {
+        
+
+        string[] emails;
+
+        if (RecieversField.Contains(","))
+        {
+            emails = RecieversField.Split(",");
+
+        }
+        else
+        {
+            emails = new string[1] { RecieversField.Trim() };
+        }
+
+        await emailServise.SendMail(emails, SubjectField, EmailField);
+    }
+
+}
